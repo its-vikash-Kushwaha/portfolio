@@ -1,0 +1,86 @@
+.about {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.heading {
+    text-align: center;
+}
+
+.subtitle {
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--secondary);
+}
+
+.highlightText {
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+.skillsArea {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.skillCategory h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--foreground);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skillTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skillTag {
+    padding: 8px 16px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.skillTag:hover {
+    background: var(--foreground);
+    color: var(--background);
+    transform: translateY(-2px);
+    border-color: var(--foreground);
+}
+
+@media (max-width: 968px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}

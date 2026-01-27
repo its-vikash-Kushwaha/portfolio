@@ -1,0 +1,129 @@
+.experience {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.heading {
+    text-align: center;
+}
+
+.subtitle {
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+    transform: translateX(-50%);
+}
+
+.item {
+    width: 100%;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.itemLeft {
+    flex-direction: row-reverse;
+}
+
+.dot {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    width: 16px;
+    height: 16px;
+    background: var(--primary);
+    border: 4px solid var(--background);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.card {
+    width: 45%;
+    padding: 25px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    transition: var(--transition);
+}
+
+.card:hover {
+    border-color: var(--primary);
+    transform: scale(1.02);
+}
+
+.date {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.itemTitle {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.org {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--foreground);
+    opacity: 0.8;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.desc {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 20px;
+    }
+
+    .dot {
+        left: 20px;
+    }
+
+    .card {
+        width: calc(100% - 60px);
+        margin-left: 60px;
+    }
+
+    .item {
+        justify-content: flex-start;
+    }
+}
