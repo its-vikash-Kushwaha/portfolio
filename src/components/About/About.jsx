@@ -55,37 +55,52 @@ const About = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    <div className={styles.text}>
-                        <p>
-                            I am an <span className={styles.highlightText}>Aspiring Backend Developer</span> with hands-on experience in Java and Spring Boot for building RESTful APIs and scalable web applications. Currently pursuing B.Tech at KIET Group of Institutions.
-                        </p>
-                        <br />
-                        <p>
-                            Skilled in <span className={styles.highlightText}>MySQL, Firebase, and backend integration</span> with secure user authentication. I am proficient in designing database-driven solutions and implementing efficient backend services for real-world projects.
-                        </p>
-                        <br />
-                        <p>
-                            My passion lies in <span className={styles.highlightText}>Data Structures & Algorithms</span> and architecting systems that are both performant and scalable. I am always eager to learn new technologies and contribute to innovative tech solutions.
-                        </p>
+                    <div className={styles.bioCard}>
+                        <div className={styles.text}>
+                            <p>
+                                I am an <span className={styles.highlightText}>Aspiring Backend Developer</span> with hands-on experience in Java and Spring Boot for building RESTful APIs and scalable web applications. Currently pursuing B.Tech at KIET Group of Institutions.
+                            </p>
+                            <br />
+                            <p>
+                                Skilled in <span className={styles.highlightText}>MySQL, Firebase, and backend integration</span> with secure user authentication. I am proficient in designing database-driven solutions and implementing efficient backend services for real-world projects.
+                            </p>
+                            <br />
+                            <p>
+                                My passion lies in <span className={styles.highlightText}>Data Structures & Algorithms</span> and architecting systems that are both performant and scalable. I am always eager to learn new technologies and contribute to innovative tech solutions.
+                            </p>
+                        </div>
                     </div>
                 </motion.div>
 
                 <motion.div
                     className={styles.skillsArea}
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial="hidden"
+                    whileInView="show"
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        show: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.1, delayChildren: 0.3 }
+                        }
+                    }}
                 >
                     {skills.map((skill, index) => (
-                        <div key={index} className={styles.skillCategory}>
+                        <motion.div
+                            key={index}
+                            className={styles.skillCategory}
+                            variants={{
+                                hidden: { opacity: 0, y: 20 },
+                                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                            }}
+                        >
                             <h3>{skill.icon} {skill.category}</h3>
                             <div className={styles.skillTags}>
                                 {skill.items.map((item, i) => (
                                     <span key={i} className={styles.skillTag}>{item}</span>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </motion.div>
             </div>

@@ -25,8 +25,21 @@
 .grid {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
-    gap: 60px;
-    align-items: start;
+    gap: 40px;
+    align-items: stretch;
+}
+
+.bioCard {
+    height: 100%;
+    padding: 35px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .text {
@@ -36,23 +49,42 @@
 }
 
 .highlightText {
-    color: var(--foreground);
-    font-weight: 600;
+    color: var(--primary);
+    font-weight: 700;
 }
 
 .skillsArea {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 15px;
+}
+
+.skillCategory {
+    padding: 24px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    transition: var(--transition);
+}
+
+.skillCategory:hover {
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px var(--primary-glow);
+    transform: translateY(-5px);
 }
 
 .skillCategory h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: var(--foreground);
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--primary);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
 }
 
 .skillTags {
@@ -62,13 +94,14 @@
 }
 
 .skillTag {
-    padding: 8px 16px;
+    padding: 8px 18px;
     background: var(--muted);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
     transition: var(--transition);
+    color: var(--secondary);
 }
 
 .skillTag:hover {

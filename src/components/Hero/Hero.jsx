@@ -9,6 +9,7 @@ import styles from './Hero.module.css';
 const Hero = () => {
     return (
         <section className={`section ${styles.hero}`}>
+            <div className={styles.gridBackground} />
             <motion.div
                 className={styles.content}
                 initial={{ opacity: 0, x: -50 }}

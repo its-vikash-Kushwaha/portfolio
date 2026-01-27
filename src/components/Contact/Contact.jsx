@@ -1,11 +1,44 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Linkedin, Globe, Github } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Linkedin, Globe, Github, Send, CheckCircle } from 'lucide-react';
 import styles from './Contact.module.css';
 
 const Contact = () => {
+    const [status, setStatus] = useState('idle'); // idle, sending, success
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('sending');
+
+        const formData = new FormData(e.target);
+        formData.append("access_key", "b620be6f-97bf-49eb-997c-1892e0404108");
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setStatus('success');
+                e.target.reset();
+                // Reset after 5 seconds
+                setTimeout(() => setStatus('idle'), 5000);
+            } else {
+                console.error("Error", data);
+                setStatus('idle');
+                alert("Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error", error);
+            setStatus('idle');
+            alert("Something went wrong. Please try again.");
+        }
+    };
     return (
         <>
             <section id="contact" className={`section ${styles.contact}`}>
@@ -64,21 +97,58 @@ const Contact = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-                            <div className={styles.formGroup}>
-                                <label>Name</label>
-                                <input type="text" placeholder="John Doe" required />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label>Email</label>
-                                <input type="email" placeholder="john@example.com" required />
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label>Message</label>
-                                <textarea rows="5" placeholder="Your Message..." required></textarea>
-                            </div>
-                            <button type="submit" className={styles.submitBtn}>Send Message</button>
-                        </form>
+                        <AnimatePresence mode="wait">
+                            {status === 'success' ? (
+                                <motion.div
+                                    className={styles.successMessage}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    key="success"
+                                >
+                                    <CheckCircle size={60} color="var(--primary)" />
+                                    <h3>Message Received!</h3>
+                                    <p>Thank you for reaching out. I'll get back to you shortly.</p>
+                                    <button onClick={() => setStatus('idle')} className={styles.backBtn}>
+                                        Send another message
+                                    </button>
+                                </motion.div>
+                            ) : (
+                                <motion.form
+                                    className={styles.form}
+                                    onSubmit={handleSubmit}
+                                    initial={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    key="form"
+                                >
+                                    <div className={styles.formGroup}>
+                                        <label>Name</label>
+                                        <input type="text" name="name" placeholder="John Doe" required disabled={status === 'sending'} />
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label>Email</label>
+                                        <input type="email" name="email" placeholder="john@example.com" required disabled={status === 'sending'} />
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label>Message</label>
+                                        <textarea name="message" rows="5" placeholder="Your Message..." required disabled={status === 'sending'}></textarea>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className={styles.submitBtn}
+                                        disabled={status === 'sending'}
+                                    >
+                                        {status === 'sending' ? (
+                                            <>Sending...</>
+                                        ) : (
+                                            <>
+                                                Send Message <Send size={18} />
+                                            </>
+                                        )}
+                                    </button>
+                                </motion.form>
+                            )}
+                        </AnimatePresence>
                     </motion.div>
                 </div>
             </section>
