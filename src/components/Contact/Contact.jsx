@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Linkedin, Globe, Github, Send, CheckCircle } from 'lucide-react';
+import { Mail, Linkedin, Globe, Github, Send, CheckCircle, Phone, MapPin } from 'lucide-react';
 import styles from './Contact.module.css';
 
 const Contact = () => {
@@ -82,11 +82,26 @@ const Contact = () => {
                                 <p>leetcode.com/u/its_vikash_kushwaha</p>
                             </div>
                         </div>
+                        <div className={styles.infoItem}>
+                            <div className={styles.icon}><Phone size={24} /></div>
+                            <div className={styles.infoContent}>
+                                <h4>Phone</h4>
+                                <p>+91 6307532939</p>
+                            </div>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <div className={styles.icon}><MapPin size={24} /></div>
+                            <div className={styles.infoContent}>
+                                <h4>Location</h4>
+                                <p>Muradnagar, Ghaziabad, Delhi NCR</p>
+                            </div>
+                        </div>
 
                         <div className={styles.socials}>
                             <a href="https://github.com/its-vikash-Kushwaha" className={styles.socialLink} target="_blank" rel="noopener noreferrer"><Github size={20} /></a>
                             <a href="https://www.linkedin.com/in/vikash-kushwaha-a97775250/" className={styles.socialLink} target="_blank" rel="noopener noreferrer"><Linkedin size={20} /></a>
                             <a href="mailto:vikashkus7309@gmail.com" className={styles.socialLink}><Mail size={20} /></a>
+                            <a href="tel:6307532939" className={styles.socialLink}><Phone size={20} /></a>
                         </div>
                     </motion.div>
 
