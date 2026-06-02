@@ -4,125 +4,158 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
-import { Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
+import { Sun, Moon, Menu, X, Download } from 'lucide-react';
 import styles from './Navbar.module.css';
 
-const Navbar = () => {
+const NAV_LINKS = [
+    { label: 'About',      href: '#about'      },
+    { label: 'Projects',   href: '#projects'   },
+    { label: 'Timeline',   href: '#experience' },
+    { label: 'Contact',    href: '#contact'    },
+];
+
+export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
-    const [scrolled, setScrolled] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled]       = useState(false);
+    const [menuOpen, setMenuOpen]       = useState(false);
+    const [active, setActive]           = useState('');
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const navLinks = [
-        { name: 'About', href: '#about' },
-        { name: 'Projects', href: '#projects' },
-        { name: 'Experience', href: '#experience' },
-        { name: 'Contact', href: '#contact' },
-    ];
-
     return (
-        <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-            <div className={`${styles.navContainer} ${scrolled ? styles.containerScrolled : ''}`}>
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Link href="/" className={styles.logo}>
-                        VK<span>.</span>
+        <>
+            <motion.nav
+                className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}
+                initial={{ y: -80, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            >
+                <div className={styles.inner}>
+                    {/* Logo */}
+                    <Link href="/" className={styles.logo} id="nav-logo">
+                        <span className={styles.logoBracket}>&lt;</span>
+                        VK
+                        <span className={styles.logoBracket}>/&gt;</span>
                     </Link>
-                </motion.div>
 
-                {/* Desktop Links */}
-                <ul className={styles.navLinks}>
-                    {navLinks.map((link, index) => (
-                        <motion.li
-                            key={link.name}
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                    {/* Desktop Nav */}
+                    <ul className={styles.links} role="navigation" aria-label="Main navigation">
+                        {NAV_LINKS.map((l, i) => (
+                            <motion.li key={l.label}
+                                initial={{ opacity: 0, y: -8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 + i * 0.07 }}
+                            >
+                                <Link
+                                    href={l.href}
+                                    className={`${styles.link} ${active === l.href ? styles.linkActive : ''}`}
+                                    onClick={() => setActive(l.href)}
+                                    id={`nav-${l.label.toLowerCase()}`}
+                                >
+                                    {l.label}
+                                </Link>
+                            </motion.li>
+                        ))}
+                    </ul>
+
+                    {/* Right actions */}
+                    <div className={styles.actions}>
+                        <button
+                            className={styles.themeBtn}
+                            onClick={toggleTheme}
+                            aria-label="Toggle theme"
+                            id="nav-theme-toggle"
                         >
-                            <Link href={link.href} className={styles.navLink}>
-                                {link.name}
-                                <span className={styles.navIndicator}></span>
-                            </Link>
-                        </motion.li>
-                    ))}
-                </ul>
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={theme}
+                                    initial={{ rotate: -90, opacity: 0 }}
+                                    animate={{ rotate: 0, opacity: 1 }}
+                                    exit={{ rotate: 90, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                                </motion.span>
+                            </AnimatePresence>
+                        </button>
 
-                <div className={styles.actions}>
-                    <motion.button
-                        className={styles.themeToggle}
-                        onClick={toggleTheme}
-                        aria-label="Toggle Theme"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                    >
-                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                    </motion.button>
-
-                    <div className={styles.desktopActions}>
-                        <a href="https://drive.google.com/file/d/1rkO-WBe8KNmAfW6ZyDGqaH_UIjbH1IAD/view?usp=sharing" target="_blank" rel="noopener noreferrer" className={styles.cvBtn}>
-                            CV
+                        <a
+                            href="https://drive.google.com/file/d/10ZGCzoxxjd0WrNBYwH23lhrqnAX7rUot/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.resumeBtn}
+                            id="nav-resume"
+                        >
+                            <Download size={15} />
+                            Resume
                         </a>
-                        <Link href="#contact" className={styles.hireBtn}>
+
+                        <Link href="#contact" className={styles.hireBtn} id="nav-hire">
                             Hire Me
                         </Link>
+
+                        {/* Mobile hamburger */}
+                        <button
+                            className={styles.hamburger}
+                            onClick={() => setMenuOpen(o => !o)}
+                            aria-label="Toggle mobile menu"
+                            id="nav-mobile-toggle"
+                        >
+                            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+                        </button>
                     </div>
-
-                    <button
-                        className={styles.mobileMenuBtn}
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label="Toggle Menu"
-                    >
-                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
                 </div>
-            </div>
+            </motion.nav>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile drawer */}
             <AnimatePresence>
-                {mobileMenuOpen && (
+                {menuOpen && (
                     <motion.div
-                        className={styles.mobileMenu}
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
+                        className={styles.drawer}
+                        initial={{ opacity: 0, y: -12, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -12, scale: 0.97 }}
+                        transition={{ duration: 0.25 }}
                     >
-                        <ul className={styles.mobileNavLinks}>
-                            {navLinks.map((link) => (
-                                <li key={link.name}>
+                        <ul className={styles.drawerLinks}>
+                            {NAV_LINKS.map(l => (
+                                <li key={l.label}>
                                     <Link
-                                        href={link.href}
-                                        className={styles.mobileNavLink}
-                                        onClick={() => setMobileMenuOpen(false)}
+                                        href={l.href}
+                                        className={styles.drawerLink}
+                                        onClick={() => setMenuOpen(false)}
                                     >
-                                        {link.name} <ArrowRight size={16} />
+                                        {l.label}
                                     </Link>
                                 </li>
                             ))}
-                            <li className={styles.mobileActions}>
-                                <a href="https://drive.google.com/file/d/1rkO-WBe8KNmAfW6ZyDGqaH_UIjbH1IAD/view?usp=sharing" target="_blank" rel="noopener noreferrer" className={styles.cvBtn}>
-                                    CV
-                                </a>
-                                <Link href="#contact" className={styles.hireBtn} onClick={() => setMobileMenuOpen(false)}>
-                                    Hire Me
-                                </Link>
-                            </li>
                         </ul>
+                        <div className={styles.drawerBottom}>
+                            <a
+                                href="https://drive.google.com/file/d/10ZGCzoxxjd0WrNBYwH23lhrqnAX7rUot/view?usp=sharing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.resumeBtn}
+                                style={{ width: '100%', justifyContent: 'center' }}
+                            >
+                                <Download size={15} /> Resume
+                            </a>
+                            <Link
+                                href="#contact"
+                                className={styles.hireBtn}
+                                onClick={() => setMenuOpen(false)}
+                                style={{ textAlign: 'center' }}
+                            >
+                                Hire Me
+                            </Link>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </nav>
+        </>
     );
-};
-
-export default Navbar;
+}
